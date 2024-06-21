@@ -33,8 +33,14 @@ int main()
     parse_csv(COURSES_PATH, vector_of_courses);
 
     write_courses_offered(vector_of_courses);
+    // std::cout << "after write_courses_offered, print vector" << std::endl;
+    // std::cout << "--------------------------------" << std::endl;
+    // print_vector(vector_of_courses);
 
     write_courses_not_offered(vector_of_courses);
+    // std::cout << "after write_courses_not_offered, print vector" << std::endl;
+    // std::cout << "--------------------------------" << std::endl;
+    // print_vector(vector_of_courses);
 
     FILE *pipe = popen("python3 utils/autograder.py", "r");
     if (!pipe)
@@ -49,7 +55,7 @@ int main()
     pclose(pipe);
 
     // uncomment this line to debug
-    // std::cout << "print vector" << std::endl;
-    // print_vector(vector_of_courses);
+    std::cout << "print vector" << std::endl;
+    print_vector(vector_of_courses);
     return 0;
 }

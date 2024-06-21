@@ -93,14 +93,14 @@ void parse_csv(std::string filename, std::vector<Course> &vector_of_courses)
  * 1) Keep track of the classes that you need to delete!
  * 2) Use the delete_elem_from_vector function we give you!
  */
-void write_courses_offered(std::vector<Course> vector_of_courses)
+void write_courses_offered(std::vector<Course> &vector_of_courses)
 {
     // STUDENT TODO: implement this function
     std::ofstream outputFile(COURSES_OFFERED_CSV_PATH);
     if (outputFile.is_open())
     {
         /* code */
-        for (auto course : vector_of_courses)
+        for (auto &course : vector_of_courses)
         {
             if (course.quarter != "null")
             {
@@ -110,14 +110,20 @@ void write_courses_offered(std::vector<Course> vector_of_courses)
     }
     outputFile.close();
     // delete classes
-    for (auto course : vector_of_courses)
+    std::vector<Course> elements_to_delete;
+    for (auto &course : vector_of_courses)
     {
         if (course.quarter != "null")
         {
             /* code */
-            delete_elem_from_vector(vector_of_courses, course);
+            elements_to_delete.push_back(course);
         }
     }
+    for (auto &course : elements_to_delete)
+    {
+        delete_elem_from_vector(vector_of_courses, course);
+    }
+
     // print_vector(vector_of_courses);
     // std::cout << "vector_of_courses size: " << vector_of_courses.size() << std::endl;
 }
@@ -133,14 +139,14 @@ void write_courses_offered(std::vector<Course> vector_of_courses)
  *
  * HINT: This should be VERY similar to write_courses_offered
  */
-void write_courses_not_offered(std::vector<Course> vector_of_courses)
+void write_courses_not_offered(std::vector<Course> &vector_of_courses)
 {
     // STUDENT TODO: implement this function
     std::ofstream outputFile(COURSES_NOT_OFFERED_CSV_PATH);
     if (outputFile.is_open())
     {
         /* code */
-        for (auto course : vector_of_courses)
+        for (auto &course : vector_of_courses)
         {
             if (course.quarter == "null")
             {
@@ -150,13 +156,20 @@ void write_courses_not_offered(std::vector<Course> vector_of_courses)
     }
     outputFile.close();
     // delete classes
-    for (auto course : vector_of_courses)
+    // 删除导致迭代器失效，尝试先收集待删除元素，后统一删除
+    // 当从 std::vector 中删除元素时，指向该元素的迭代器和其后的所有迭代器都会失效。使用这些失效的迭代器可能会导致未定义行为。
+    std::vector<Course> elements_to_delete;
+    for (auto &course : vector_of_courses)
     {
         if (course.quarter == "null")
         {
             /* code */
-            delete_elem_from_vector(vector_of_courses, course);
+            elements_to_delete.push_back(course);
         }
+    }
+    for (auto &course : elements_to_delete)
+    {
+        delete_elem_from_vector(vector_of_courses, course);
     }
 }
 
@@ -165,11 +178,14 @@ void write_courses_not_offered(std::vector<Course> vector_of_courses)
 // TODO: ADD DOCUMENTATION COMMENTS
 void print_vector(std::vector<Course> vector_of_courses)
 {
+    int line = 0;
     for (int i = 1; i < vector_of_courses.size(); ++i)
     {
-        std::cout << vector_of_courses[i].title << ","
+        std::cout << line << ": "
+                  << vector_of_courses[i].title << ","
                   << vector_of_courses[i].number_of_units << ","
                   << vector_of_courses[i].quarter << std::endl;
+        line++;
     }
 }
 

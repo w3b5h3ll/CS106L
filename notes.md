@@ -314,6 +314,197 @@ stack_list 是对 list 的包装
 
 
 
+C++23
+
+flat_map
+
+flat_set,  更快的容器
+
+容器包含了许多对象
+
+如何访问这些对象
+
+
+
+Iterators,迭代器
+
+容器实现了Iterators来做这些事情
+
+- 访问所有数据
+- 知道顺序，next
+
+In the STL
+
+所有的容器实现了iterators，但不是都相同
+
+一些相同的操作
+
+- 初始化 iter=s.begin()
+  - begin() end()方法
+- ++iter, 
+- *iter,解引用
+
+不同的iterator
+
+![image-20240621165132990](notes/image-20240621165132990.png)
+
+
+
+input
+
+例如：`auto elem = *it;`
+
+output
+
+`*elem = value`
+
+bidrectional
+
+--iter
+
+random
+
+iter+=5
+
+![image-20240621165448107](notes/image-20240621165448107.png)
+
+
+
+
+
+简单的遍历方法
+
+```cpp
+for (auto iter=set.begin(); iter!=set.end(); ++iter)
+    const auto& elem = *iter;
+```
+
+for-each loop
+
+## 指针Pointers
+
+```cpp
+int val = 18;
+int* ptr = &val;
+
+```
+
+如果想要访问数据，解引用
+
+```cpp
+std::cout << *ptr << std::endl;
+```
+
+- Iterators are a type of pointer
+- 迭代器只能指向容器中的元素，但是指针可以指向任何对象
+  - 都只不过是内存罢了
+
+## Classes 类
+
+C语言缺乏OOP机制，
+
+- 类允许用户封装数据和功能
+
+### OOP
+
+- 一切围绕对象展开
+- 关注类设计与实现
+- 类对象
+
+容器就是一些定义在STL中的类
+
+有趣的点
+
+struct和class的对比
+
+- struct没有访问控制，class有
+
+```c
+struct Student
+{
+    // fields
+    std::string name;
+    std::string state;
+    int age;
+    
+};
+// 所有的field是public,可以被用户进行修改
+// 导致一些未定义行为，如下
+s.age = -2345;
+// 修改为负数
+
+```
+
+类
+
+public, private
+
+限制对private域的访问
+
+
+
+a Student class
+
+
+
+![image-20240621171636301](notes/image-20240621171636301.png)
+
+
+
+
+
+class 设计
+
+- constructor
+- private member function/variables
+- publice member fuction / 接口 for a user
+- Destructor
+
+
+
+构造函数
+
+- 对象初始化
+
+`this`关键字，指向当前对象
+
+类型重定义
+
+```cpp
+using String = std::string;
+// 此时String类型就代表了std::string
+
+```
+
+
+
+
+
+类继承
+
+- 多态，不同的对象，需要相同的接口
+
+- 可扩展
+
+比如
+
+```cpp
+// shape class
+// has area() 
+// but different 方法去计算面积
+```
+
+
+
+容器适配器（stack ...）和子类的对比
+
+子类：主要用于继承和扩展现有类的功能，通过重用父类的代码实现多态性和代码复用。
+容器适配器：主要用于提供简化和特定用途的接口，通过封装现有的容器并限制其操作集来实现特定的行为。
+
+
+
+
+
 ## 参考
 
 https://learncs.me/stanford/cs106l
