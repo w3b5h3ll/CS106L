@@ -1,0 +1,10 @@
+TODO: Delete this line and answer the short questions in the assignment within this file!
+1. 
+无序集合，std::unordered_set,查找，删除更快。底层实现为哈希表
+
+
+2.
+容器适配器，即container adaptor是针对特定的接口需求进行封装，以便使用不同的底层容器实现同样的接口
+
+
+3.

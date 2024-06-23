@@ -505,6 +505,329 @@ using String = std::string;
 
 
 
+## assignment1备注
+
+这个代码在逻辑上有几个潜在的问题，特别是由于在循环中删除元素时没有正确处理迭代器失效的问题。以下是具体的问题及其解决方法：
+
+问题 1: 迭代器失效
+在遍历 vector_of_courses 时，如果你删除了当前正在访问的元素，会导致当前迭代器失效，进而可能导致未定义行为。
+
+问题 2: delete_elem_from_vector 函数中的迭代器处理
+delete_elem_from_vector 函数在找到元素后直接调用 erase，但并没有返回新的有效迭代器供循环使用。
+
+解决方法
+可以通过在循环中手动管理迭代器来避免迭代器失效的问题。一个常见的解决方案是使用显式迭代器，并在删除元素后更新迭代器。
+
+以下是修正后的代码示例：
+
+cpp
+Copy code
+void delete_elem_from_vector(std::vector<Course> &v, const Course &elem)
+{
+    auto it = std::find(v.begin(), v.end(), elem);
+    if (it != v.end())
+    {
+        v.erase(it);
+    }
+}
+
+void process_courses(std::vector<Course> &vector_of_courses)
+{
+    for (auto it = vector_of_courses.begin(); it != vector_of_courses.end(); )
+    {
+        if (it->quarter == "null")
+        {
+            it = vector_of_courses.erase(it); // erase 返回下一个有效的迭代器
+        }
+        else
+        {
+            ++it; // 只有在没有删除元素时才递增迭代器
+        }
+    }
+}
+解释
+显式迭代器管理：在 process_courses 函数中，使用显式迭代器遍历 vector_of_courses。
+删除元素后更新迭代器：当删除元素时，erase 返回一个指向下一个元素的迭代器，这个新的迭代器在下一次循环中使用。
+仅在不删除时递增迭代器：当不删除元素时，显式递增迭代器。这确保了每个元素都被正确处理。
+通过这种方式，可以避免在循环中删除元素时迭代器失效的问题，从而使代码更加稳健和可靠。
+
+
+
+## Template Classes
+
+模板类
+
+使得类更加通用
+
+- 类型参数化
+- 组合多种通用类型
+
+```cpp
+// only for int
+class IntContainer
+{
+    public:
+    IntContainer(int val);
+    int getValue();
+    private:
+    int value;
+}
+
+// general,多种类型
+template <typename T>
+class Container
+{
+    public:
+    Container(T val);
+    T getValue();
+    
+    private:
+    T value;
+}
+```
+
+模板声明
+
+```cpp
+template <typename T, typename U>
+需要给编译器声明Ts
+```
+
+模板方法
+
+需要在.h文件包含.cpp文件
+
+Const Correctness
+
+const关键字，不可更改
+
+Const interface, 
+
+- const 对象只能通过cosnt 接口进行操作
+
+
+
+做一个 const版本的function
+
+```cpp
+int& at(size_t index) const
+{
+    return _array[index];
+}
+```
+
+类型转换
+
+```cpp
+const_cast<target-type>
+    // 可以将非const类型转为const类型
+```
+
+
+
+函数模板，类模板
+
+类，参数化使用的数据类型
+
+类模板，生成类
+
+```cpp
+template<class T1, class T2>;
+class A
+{
+    public:
+    T1 value1;
+    T2 value2;
+    T1 add(T1 a, T2 b)
+}
+// 类模板成员函数，类外定义
+T1 A<T1,T2>::add(T1 a, T2 b)
+```
+
+
+
+constraints
+
+concept
+
+
+
+编译器进行参数推导
+
+argument deduction
+
+```cpp
+template <class T>
+const T& main(const T&a, constT&b)
+
+{
+    return b < a ? b:a;
+}
+```
+
+```cpp
+template<typename T>
+// 抽出类型
+class complex
+{
+    public:
+    complex(T r = 0, T i = 0)
+        :re(r),im(i){}
+    private:
+    T re, im;
+    
+}
+
+// 实例化
+{
+    complex<double> c1(2.5, 1.5);
+    complex<int> c2(2,6);
+}
+
+```
+
+
+
+成员模板
+
+- 构造函数，标准库。使得构造函数更加灵活
+
+```cpp
+template <class T1, class T2>
+struct pair
+{
+    T1 first;
+    T2 second;
+    pair():first(T1()),send(T2()){}
+    
+}
+
+```
+
+模板就是blueprint,创建类或函数
+
+https://blog.csdn.net/u014609638/article/details/107454593
+
+
+
+shared_ptr
+
+```cpp
+up-cast
+
+```
+
+
+
+
+
+class template
+
+function template
+
+member template
+
+
+
+
+
+
+
+
+
+模板方法
+
+- 显示指定type调用
+- 隐式进行调用
+
+
+
+- like in template classes, template functions are not compiled until used.
+
+编译器会为不同参数的实例，生成新的版本
+
+- 就好象，你自己实现了多个版本
+
+- code runs during runtimes
+
+**make code run during complie time**
+
+constexpr关键字
+
+
+
+
+
+使用namespace,避免命名冲突
+
+
+
+functor, 提供operator()实现的类
+
+- 创建闭包，定制功能
+- 闭包
+  - 一个functor object的单例
+
+lambdas
+
+functors
+
+function pointers
+
+上面的所有都可以转换为标准的函数
+
+`std::function<return_type(param_types)> func`
+
+
+
+虚函数
+
+
+
+
+
+算法与STL
+
+- all standard algorithms work on iterators
+- 高效的搜索，智能指针
+
+
+
+Const Correctness
+
+常量正确性
+
+> 在C++中，const correctness是指使用const关键字来保证代码的正确性和安全性，确保对象在不应修改的情况下不会被修改。通过适当地使用const，可以提高代码的可读性、可维护性和可靠性。下面详细解释const correctness的各个方面。
+
+
+
+变量：声明为const，防止变量被修改。
+指针：指向常量的指针、常量指针、指向常量的常量指针。
+成员函数：声明为const，保证函数不修改成员变量。
+函数参数：声明为const，防止函数修改参数。
+返回值：返回const指针或引用，防止通过返回值修改对象。
+通过在适当的地方使用const，可以确保代码的const correctness，提高代码的稳定性和可维护性。
+
+const object 仅仅可以与 const interface
+
+
+
+
+
+```cpp
+// 添加const关键字, 如果类实例化为cosnt类型，成员函数需要cosnt,否则编译器报错
+std::string Student::getName() const
+{
+    return this->name;
+}
+```
+
+
+
+
+
+
+
 ## 参考
 
 https://learncs.me/stanford/cs106l
