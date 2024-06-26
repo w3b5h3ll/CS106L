@@ -824,6 +824,303 @@ std::string Student::getName() const
 
 
 
+## Operator Overloading
+
+操作符重载
+
+成员函数，操作符重载
+
+非成员函数，操作符重载
+
+```cpp
+inline complex&
+    complex::operator += (this, const complex& r)
+{
+    return __doapl(this, r)
+}
+```
+
+对象是实例化的类
+
+classes let you define new objects with new behavior
+
+
+
+使用模板，参数化类和函数
+
+
+
+unordered maps/sets
+
+STL中，maps sets都有无序的版本
+
+- ordered 版本需要 比较函数定义
+- unordered版本需要哈希函数
+
+还记得 cout吗
+
+![image-20240623202134008](notes/image-20240623202134008.png)
+
+functor就是一个实现了`()`操作符的类
+
+- 也叫做函数对象，仿函数
+
+- c++引入类lambda表达式，是得闭包成为可能
+
+闭包：一个函数以及相关环境捆绑在一起的实体，是得函数拥有获取外部变量的能力
+
+强大的特性
+
+Lambda 表达式与闭包
+Lambda 表达式是 C++11 引入的一种简洁的函数定义方式，可以捕获其所在作用域的变量，从而实现闭包。
+
+基本语法
+
+```cpp
+Copy code
+[capture](parameters) -> return_type {
+    body
+};
+```
+
+
+
+- capture：指定哪些外部变量可以被捕获以及如何捕获。
+- parameters：函数的参数列表。
+- return_type：返回类型（可以省略，编译器会自动推导）。
+- body：函数体。
+
+
+
+lambda使用场景
+
+- STL算法库
+- 事件处理和回调函数
+- 并发编程中，可用作线程函数
+
+![image-20240623203102917](notes/image-20240623203102917.png)
+
+
+
+操作符中的左值与右值
+
+
+
+
+
+friend关键字
+
+- 允许非成员函数或类在其他类中访问private信息
+
+```cpp
+friend class [name];
+```
+
+
+
+global overloading,将会影响所有
+
+overloading 策略
+
+- 不要过度使用
+
+- 最好看起来有直接明显的意图
+
+- 最后与实际的操作相似
+
+注意事项
+
+- 友元函数破坏封装性：使用友元函数会破坏类的封装性，因为它允许外部函数访问类的私有成员。因此，友元函数应慎重使用，只有在确实需要的时候才使用。
+- 不能通过对象调用：由于友元函数不是类的成员函数，所以不能通过对象来调用，而是直接调用。
+- 作用范围：友元函数的声明是在类中，而定义可以在类的外部进行。
+  理解友元函数的概念和使用方法，对于在C++编程中处理需要跨类访问数据的场景非常有帮助。
+
+
+
+
+
+## Special Member Functions
+
+有那些特殊的成员函数呢
+
+6个特殊的成员函数
+
+![image-20240624101306342](notes/image-20240624101306342.png)
+
+当被调用的时候，生成这些function
+
+- default constructor,默认构造函数，无参数
+
+这些函数都是自动生成的
+
+构造函数，初始化我们的成员变量
+
+使用uniform,列表方式初始化可以同时完成两件事，更加高效
+
+- 使用默认value初始化
+- 重新赋值
+
+```cpp
+vector<T>::vector<T>():_size(0), _capacity(kInitialSize), _elems(new T[kInitialSize]){}
+```
+
+如果变量是一个non-assignable 类型
+
+- 默认的特殊成员函数，是不能满足需求的
+
+成员复制
+
+如果变量是指针，member-wise copy将指向相同的分配的数据，不是一个fresh copy
+
+
+
+深拷贝与浅拷贝
+
+deep copy: 完全，独立的复制
+
+- 比如，重写，default special member functions
+
+default and delete
+
+![image-20240624104223160](notes/image-20240624104223160.png)
+
+
+
+delete 关键字会删除该函数
+
+- 我们可以选择部分函数存在
+- 很多用处
+  - 比如只允许存在一个实例的拷贝
+  - 这就是std::unique_ptr的工作原理
+
+使用 default改变，默认的到底是哪一个
+
+![image-20240624104634635](notes/image-20240624104634635.png)
+
+https://learn.microsoft.com/zh-cn/cpp/cpp/special-member-functions?view=msvc-170
+
+
+
+资源回收
+
+- C++中，许多资源，需要在获取后，进行释放
+
+
+
+![image-20240624131111553](notes/image-20240624131111553.png)
+
+如何确保，在存在异常的例子里，释放资源
+
+RAII
+
+Resource Acquisiton is Initialization
+
+- 强大
+
+RAII到底是什么
+
+- 一个类所使用的资源，应该在构造函数中获取
+- 并且应该在析构函数中释放
+
+具体说明
+
+- 通过遵守 RAII策略，避免了half-valid状态
+- 当资源不再scope时候，析构函数被调用
+
+![image-20240624132516793](notes/image-20240624132516793.png)
+
+
+
+RAII的实现方式
+
+- locks -> lock_guard
+
+memory?
+
+智能指针
+
+- 避免显示的使用 `new`以及`delete`关键字
+
+
+
+- 推荐使用`make_unique`关键字替代
+  - 超出作用域时，会自动释放内存
+- 如果new之后，发生异常，但是没有使用`delete`进行释放，就会内存泄漏
+
+悬挂指针？:指向已经被释放的内存地址的指针
+
+
+
+
+
+plain/naked指的是原生指针，如`int *`等等这种，需要手动内存分配和释放
+
+
+
+有三种 符合RAII的smart pointer
+
+这些都是对指针的封装
+
+
+
+std::unique_ptr
+
+- 唯一的拥有其资源，无法被复制，只能移动所有权
+
+std::shared_ptr
+
+- 
+
+![image-20240624134818854](notes/image-20240624134818854.png)
+
+
+
+shared_ptr像是有计数器，直到所有的shared pointers都超出作用域，才释放
+
+- 多个所有者管理对象生命周期
+
+- 所有指针指向同一个对象，共享一个控制块
+
+![image-20240624135518444](notes/image-20240624135518444.png)
+
+weak指针
+
+![image-20240624135821732](notes/image-20240624135821732.png)
+
+上面的案例下，相互依赖，不会正确释放
+
+- weak_ptr本身不参与，引用计
+- 是对 shared_ptr的一种弱引用
+- ！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+## 编译
+
+预处理 编译 汇编 链接
+
+make: a build system,一个构建工具
+
+
+
+
+
+makefile
+
+![image-20240624140417068](notes/image-20240624140417068.png)
+
+
+
+
+
+
+
+cmake >> 生成makefile
+
+
+
+
+
+
+
 
 
 

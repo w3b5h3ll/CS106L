@@ -66,6 +66,7 @@ std::queue<std::string *> find_matches(std::set<std::string> &students)
 class CustomeHash
 {
 public:
+    // 重载() 函数调用运算符, 此时CustomeHash就是一个函数对象
     std::size_t operator()(const std::string &str) const
     {
         std::size_t hash = 0;
