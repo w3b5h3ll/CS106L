@@ -28,12 +28,23 @@ void User::setName(std::string name)
 
 bool User::operator<(const User &rhs) const
 {
-    return this.name < rhs.name;
+    return name < rhs.name;
 }
 
-User &&User::operator+(User &rhs) &&
+User &User::operator=(User &&other)
 {
-    friends.insert(rhs);
-    rhs.friends.insert(this);
-    return std::move(this);
+    if (this != &other)
+    {
+        /* code */
+        this->name = other.name;
+        this->friends = other.friends;
+    }
+    return *this;
+}
+
+User &operator+(User &lhs, User &rhs)
+{
+    lhs.friends.insert(rhs.friends.begin(), rhs.friends.end());
+    rhs.friends.insert(lhs.friends.begin(), rhs.friends.end());
+    return lhs;
 }

@@ -23,7 +23,7 @@ public:
 
     // TODO: add the < operator overload here!
     bool operator<(const User &rhs) const;
-    User &&operator+(User &rhs) &&;
+    friend User &operator+(User &lhs, User &rhs);
 
 private:
     std::string name;

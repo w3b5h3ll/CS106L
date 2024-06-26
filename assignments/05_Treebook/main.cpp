@@ -14,6 +14,7 @@ void printFriends(const User &user)
 
 int main()
 {
+
     // create a bunch of users
     User alice("Alice");
     User bob("Bob");
@@ -22,11 +23,11 @@ int main()
 
     // make them friends
     // alice = alice + bob;
-    alice = std::move(alice) + bob;
-    alice = std::move(alice) + charlie;
+    alice = std::move((alice) + bob);
+    alice = std::move((alice) + charlie);
 
-    dave = std::move(dave) + bob;
-    charlie = std::move(charlie) + dave;
+    dave = std::move((dave) + bob);
+    charlie = std::move((charlie) + dave);
 
     // print out their friends
     printFriends(alice);
