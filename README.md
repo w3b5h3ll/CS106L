@@ -2,11 +2,16 @@
 "Standard C++ Programming" course learning...
 
 ### Assignments
+暂时没有06, 07的starter code
+
+
 - [x] Assignment 01: SimpleEnroll
 - [x] Assignment 02: Marriage Pact
 - [x] Assignment 03: Make a Class
 - [x] Assignment 04: Weather Forecast
 - [ ] Assignment 05: TreeBook
+
+
 尝试使用`std::move()`进行右值转换,但是内部调用`set`的insert操作还是使用了`copy constructor`,如下
 ```cpp
 
